@@ -1,0 +1,28 @@
+services:
+  profileeditor:
+    image: ${DOCKER_REGISTRY-}profileeditor
+    build:
+      context: .
+      dockerfile: ProfileEditor/Dockerfile
+    ports:
+      - "8090:8080"
+      - "8091:8081"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=ProfileEditor;User Id=sa;Password=${MSSQL_PASS:-Your_Strong_Password123};TrustServerCertificate=True;
+
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${MSSQL_PASS:-Your_Strong_Password123}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+
+volumes:
+  sqldata:
