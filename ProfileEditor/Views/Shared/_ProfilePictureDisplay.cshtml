@@ -1,0 +1,8 @@
+@model Guid
+
+<div class="text-center">
+    <img src="@Url.Action("ProfilePicture", "Person", new { id = Model, v = DateTime.Now.Ticks })" 
+         class="img-fluid rounded-circle mb-3" 
+         style="max-width: 200px; max-height: 200px;" 
+         alt="Profile Picture" />
+</div> 
