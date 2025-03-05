@@ -9,6 +9,7 @@ services:
       - "8091:8081"
     depends_on:
       - db
+      - azurite
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=db;Database=ProfileEditor;User Id=sa;Password=${MSSQL_PASS:-Your_Strong_Password123};TrustServerCertificate=True;
@@ -23,6 +24,17 @@ services:
       - "1433:1433"
     volumes:
       - sqldata:/var/opt/mssql
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azurite
+    ports:
+      - "10000:10000"  # Blob service
+      - "10001:10001"  # Queue service
+      - "10002:10002"  # Table service
+    volumes:
+      - ./azurite-data:/data
+    restart: unless-stopped
 
 volumes:
   sqldata:

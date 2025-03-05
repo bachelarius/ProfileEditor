@@ -220,6 +220,9 @@ csx/
 ecf/
 rcf/
 
+# Microsoft Azurite data folder
+azurite-data/
+
 # Windows Store app package directories and files
 AppPackages/
 BundleArtifacts/
