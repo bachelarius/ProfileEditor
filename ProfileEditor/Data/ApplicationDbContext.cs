@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ProfileEditor.Models;
 
 namespace ProfileEditor.Data
 {
@@ -9,5 +10,7 @@ namespace ProfileEditor.Data
             : base(options)
         {
         }
+
+        public DbSet<Person> Persons { get; set; }
     }
 }
