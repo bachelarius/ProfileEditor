@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ProfileEditor.Data;
+using ProfileEditor.Services.ImageStore;
+using ProfileEditor.Services.Persons;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +17,14 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IPersonsService, PersonsDbService>();
+
+builder.Services.Configure<AzureBlobImageStoreServiceConfig>(builder.Configuration.GetSection("Azure:AzureStorage"));
+builder.Services.AddSingleton<IImageStoreService>(sp => 
+    new AzureBlobImageStoreService(
+        config: sp.GetRequiredService<IOptions<AzureBlobImageStoreServiceConfig>>(),
+        logger: sp.GetRequiredService<ILogger<AzureBlobImageStoreService>>()));
 
 var app = builder.Build();
 
@@ -37,7 +49,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Person}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();
