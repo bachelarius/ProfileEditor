@@ -9,6 +9,7 @@ using ProfileEditor.Services.Persons;
 using System.IO;
 
 namespace ProfileEditor.Controllers {
+    [Authorize]
     public class PersonController : Controller {
         private readonly IPersonsService _personsService;
         private readonly IImageStoreService _imageStore;
